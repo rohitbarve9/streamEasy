@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+Account
+{% endblock %}
+
+{% block content %}
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+  <h1 align="center">My Account</h1>
+</div>
+
+<br />
+
+
+<form method="POST" action="{{url_for('views.myAccount')}}">
+  <label class="btn btn-secondary" 
+         style="border-style: outset; border-width: 5px; border-color: darkgray">
+    <input 
+      type="submit" 
+      name="update_password" 
+      class="btn btn-secondary" 
+      value="Update Password" 
+      autocomplete="off">
+  </label>
+
+  <label class="btn btn-secondary" 
+         style="border-style: outset; border-width: 5px; border-color: darkgray">
+    <input 
+      type="submit" 
+      name="payment" 
+      class="btn btn-secondary" 
+      value="My Payments" 
+      autocomplete="off">
+  </label>
+
+  <label class="btn btn-secondary" 
+         style="border-style: outset; border-width: 5px; border-color: darkgray">
+    <input 
+      type="submit" 
+      name="billing" 
+      class="btn btn-secondary" 
+      value="View Billing" 
+      autocomplete="off">
+  </label>
+
+  <label class="btn btn-secondary" 
+          style="border-style: outset; border-width: 5px; border-color: darkgray">
+    <input 
+      type="submit" 
+      name="stats" 
+      class="btn btn-secondary" 
+      value="View Stats" 
+      autocomplete="off">
+  </label>
+</form>
+
+</br>
+
+<div class="card" style="width: 19rem; height: 19rem; flex-direction: row">
+  <img class="card-img-top" src="/static/images/profile_picture.png" alt="Card image cap" style="flex-direction: row">
+  <div class="card-body" style="width: 50rem; height: 15rem; flex-direction: row">
+    <h5 class="card-text" style="width: 50rem">First Name:</h3><p>{{info["first_name"].title()}}</p>
+    <h5 class="card-text" style="width: 50rem">Last Name:</h3><p>{{info["last_name"].title()}}</p>
+    <h5 class="card-text" style="width: 50rem">Username:</h3><p>{{info["username"]}}</p>
+    <h5 class="card-text" style="width: 50rem">Email Address:</h3><p>{{info["email"]}}</p>
+  </div>
+</div>
+
+
+
+{% endblock %}

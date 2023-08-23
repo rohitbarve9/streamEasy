@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+Payments
+{% endblock %}
+
+{% block content %}
+
+
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+    <h1 align="center">Payments</h1>
+</div>
+
+<form method="POST" action="">
+<label class="btn btn-secondary" 
+style="border-style: outset; border-width: 5px; border-color: darkgray">
+<input 
+type="submit" 
+name="add_card" 
+class="btn btn-secondary" 
+value="Add New Card" 
+autocomplete="off">
+</label>
+
+<table class="table table-striped" style="border-style: inset; border-width: 5px">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col"></th>
+        <th scope="col">Card Number</th>
+        <th scope="col">Card Type</th>
+        <th scope="col">Expiration Date</th>
+        <th scope="col">Billing Address</th>
+        <th scope="col" style="text-align: center;">Action</th>
+    </tr>
+    </thead>
+
+    {% if data %}
+        {% for row in data %}
+        <tr>
+            <th scope="col"></th>
+            <td scope="col">{{row['card_number']}}</td>
+            <td scope="col">{{row['card_type']}}</td>
+            <td scope="col">{{row['expiration_data']}}</td>
+            <td scope="col">{{row['address']}}</td>
+            <form method="POST" action="">
+            <td scope="col"><input type="submit" name="delete_button_{{row['card_number']}}" value="Delete"></td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <th scope="col"></th>
+            <td colspan="5"  style="text-align: center;">No Payments Available! Add new payment.</td>
+        </tr>
+    {% endif %}
+</table>
+<br>
+
+
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}
+Stats
+{% endblock %}
+
+{% block content %}
+
+
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+    <h1 align="center">User Statistics for {{month_name}}, {{year}}</h1>
+</div>
+
+<form method="POST" action="{{url_for('views.viewStats')}}">
+    <div class="form-group">
+        <label for="month">Month</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="month" 
+            name="month" 
+            placeholder="Enter Month"
+            required/>
+    </div>
+
+    <div class="form-group">
+        <label for="year">Year</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="year" 
+            name="year" 
+            placeholder="Enter Year"
+            required/>
+    </div>
+    <button type="submit" class="btn btn-dark">Get Stats</button>
+</form>
+<br>
+<br>
+<br>
+<h1><span class="badge badge-secondary">Most Utilized Service</span></h1>
+<table class="table table-striped" style="border-style: inset; border-width: 5px">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col"></th>
+        <th scope="col">Service</th>
+        <th scope="col">Time Spent (hours)</th>
+    </tr>
+    </thead>
+    {% if mostViewed_name %}
+    <tr>
+        <td><img 
+            src={{mostViewed_img}}
+            width="100" 
+            height="60"></td>  
+        <td scope="col">{{mostViewed_name}}</td>
+        <td scope="col">{{mostViewed_time_spent}}</td>
+    </tr>
+    {% else %}
+    <td colspan="8"  style="text-align: center;">No Data Exists!</td>
+    {% endif %}
+</table>
+<br>
+<br>
+<h1><span class="badge badge-secondary">Most Expensive Service (by Total Usage)</span></h1>
+<table class="table table-striped" style="border-style: inset; border-width: 5px">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col"></th>
+        <th scope="col">Service</th>
+        <th scope="col">Amount Billed ($)</th>
+    </tr>
+    </thead>
+    {% if mostBilled_name %}
+    <tr>
+        <td><img 
+          src={{mostBilled_img}}
+          width="100" 
+          height="60"></td>
+        <td scope="col">{{mostBilled_name}}</td>
+        <td scope="col">{{mostBilled_cost}}</td>
+    </tr>
+    {% else %}
+    <td colspan="8"  style="text-align: center;">No Data Exists!</td>
+    {% endif %}
+</table>
+
+{% endblock %}

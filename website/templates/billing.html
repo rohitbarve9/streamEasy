@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+Billing
+{% endblock %}
+
+{% block content %}
+
+
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+    <h1 align="center">Billing</h1>
+</div>
+
+<form method="POST" action="{{url_for('views.billing')}}">
+    <div class="form-group">
+        <label for="month">Month</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="month" 
+            name="month" 
+            placeholder="Enter Month"
+            required/>
+    </div>
+
+    <div class="form-group">
+        <label for="year">Year</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="year" 
+            name="year" 
+            placeholder="Enter Year"
+            required/>
+    </div>
+    <button type="submit" class="btn btn-dark">Get Bill</button>
+</form>
+<br>
+<br>
+<table class="table table-striped" style="border-style: inset; border-width: 5px">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col"></th>
+        <th scope="col">Service Name</th>
+        <th scope="col">Time Subscribed (Hours)</th>
+        <th scope="col">Cost</th>
+    </tr>
+    </thead>
+    {% if result %}
+        {% for row in result %}
+        <tr>
+            <th scope="col"></th>
+            <td scope="col">{{row['name']}}</td>
+            <td scope="col">{{row['time_spent']}}</td>
+            <td scope="col">{{row['cost']}}</td>
+        </tr>
+        {% endfor %}
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col" style="text-align: right">Total Cost for {{month_name}}, {{year}}: </th>
+                <th scope="col" style="text-align: left">${{total_cost['total_cost']}}</th>   
+            </tr>
+            </thead>
+    {% else %}
+        <td colspan="8"  style="text-align: center;">No Data Exists!</td>
+    {% endif %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Card
+{% endblock %}
+
+{% block content %}
+
+
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+    <h1 align="center">Add New Card</h1>
+</div>
+
+
+<form method="POST">
+    <div class="form-group">
+      <label for="card_number">Card Number</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="card_number" 
+          name="card_number" 
+          placeholder="Enter Card Number"
+          required/>
+    </div>
+  
+
+    <div class="form-group">
+      <label for="text">Card Type</label>
+      <br>
+        <select name="card_type" id="card_type">
+        <option value="Visa">Visa</option>
+        <option value="Mastercard">Mastercard</option>
+        <option value="American Express">American Express</option>
+        <option value="Discover">Discover</option>
+        <option value="Capital One">Capital One</option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <label for="security_code">Security Code</label>
+        <input
+          type="text"
+          class="form-control"
+          id="security_code"
+          name="security_code"
+          placeholder="Enter Security Code"
+          required/>
+    </div>
+  
+      
+    <div class="form-group">
+        <label for="month">Month</label>
+          <input
+            type="text"
+            class="form-control"
+            id="month"
+            name="month"
+            placeholder="MM"
+            required/>
+    </div>
+
+    <div class="form-group">
+        <label for="text">Year</label>
+          <input
+            type="text"
+            class="form-control"
+            id="year"
+            name="year"
+            placeholder="YYYY"
+            required/>
+      </div>
+
+    <br><br>
+    <h1>Billing Address</h1>
+    <br><br>
+
+    <div class="form-group">
+      <label for="text">Street Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="street_name"
+          name="street_name"
+          placeholder="Street Name"
+          required/>
+    </div>
+
+    <div class="form-group">
+      <label for="text">City</label>
+        <input
+          type="text"
+          class="form-control"
+          id="city"
+          name="city"
+          placeholder="City"
+          required/>
+    </div>
+
+    <div class="form-group">
+      <label for="text">State</label>
+        <input
+          type="text"
+          class="form-control"
+          id="state"
+          name="state"
+          placeholder="State"
+          required/>
+    </div>
+
+    <div class="form-group">
+      <label for="text">Zip Code</label>
+        <input
+          type="text"
+          class="form-control"
+          id="zip_code"
+          name="zip_code"
+          placeholder="Zip Code"
+          required/>
+    </div>
+    <br><br>
+
+    <button type="submit" class="btn btn-dark">Add</button>
+</form>
+
+{% endblock %}

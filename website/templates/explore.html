@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}
+Explore
+{% endblock %}
+
+{% block content %}
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+  {% if option == "all_movies" %}
+    <h1 align="center">Movie Library</h1>
+  {% elif option == "all_tv"  %}
+    <h1 align="center">TV Series Library</h1>
+  {% elif option == "all_favorites" %}
+    <h1 align="center">Your Favorite Movies and Shows</h1>
+  {% endif %}
+</div>
+
+<br />
+
+<form method="POST" action="{{ url_for('views.explore') }}">
+  <label class="btn btn-secondary" 
+         style="border-style: outset; border-width: 5px; border-color: darkgray">
+    <input 
+      type="submit" 
+      name="all_movies" 
+      class="btn btn-secondary" 
+      value="Movies" 
+      autocomplete="off">
+  </label>
+  <label class="btn btn-secondary" 
+         style="border-style: outset; border-width: 5px; border-color: darkgray">
+    <input 
+      type="submit" 
+      name="all_tv" 
+      class="btn btn-secondary" 
+      value="TV Shows" 
+      autocomplete="off">
+  </label>
+  <label class="btn btn-secondary" 
+         style="border-style: outset; border-width: 5px; border-color: darkgray">
+    <input 
+      type="submit" 
+      name="all_favorites" 
+      class="btn btn-secondary" 
+      value="My Favorites" 
+      autocomplete="off">
+  </label>
+</form>
+
+  {% if option == "all_movies" %}
+    <form class="form-inline" method="POST" action="{{ url_for('views.explore') }}">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="movie_search" class="sr-only">Enter A Movie Title</label>
+        <input type="text" name="movie_search" class="form-control" id="movie_search" placeholder="Enter a Movie Title">
+      </div>
+      <button type="submit" name="movie_search" class="btn btn-secondary mb-2">Search</button>
+    </form>
+  {% elif option == "all_tv" %}
+    <form class="form-inline" method="POST" action="{{ url_for('views.explore') }}">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="tv_search" class="sr-only">Enter A TV Show Title</label>
+        <input type="text" name="tv_search" class="form-control" id="tv_search" placeholder="Enter a TV Show Title">
+      </div>
+      <button type="submit" name="tv_search" class="btn btn-secondary mb-2">Search</button>
+  </form>
+{% endif %}
+
+
+<div class="panel-body table-responsive" 
+     style="border-style: inset; border-width: 5px; max-height:800px">
+    
+     <table class="table table-striped" 
+            style="border-style: inset; border-width: 5px;">
+        <thead class="thead-dark" 
+               style="box-shadow: inset 5px 5px darkgray, 0 5px darkgray; position: sticky; top: 0; position: sticky; left: 0">
+            <tr>
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Service
+              </th>
+              
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Title
+                  <h1 style="font-size:small; font-style: italic;">(Click Title For Description)</h1>
+              </th>
+              
+              {% if option == "all_favorites" %}
+                <th scope="col" 
+                    style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                    Type
+                </th>
+              {% endif %}
+
+              <th scope="col" 
+                  style="text-align: center; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Critic Score
+                  <h1 style="font-size:small; font-style: italic;">(Rotten Tomatoes)</h1>
+              </th>
+              
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Rating
+              </th>
+              
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Genre
+              </th>
+              
+              {% if option == "all_movies" %}
+                <th scope="col" 
+                    style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                    Run Time
+                    <h1 style="font-size:small; font-style: italic;">(In Minutes)</h1>
+                </th>
+              {% elif option == "all_tv"  %}
+                <th scope="col" 
+                    style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                    # of Seasons
+                </th>
+              {% endif %}
+
+              {% if option == "all_movies" or option == "all_tv" %}
+                <th scope="col" 
+                    style="text-align: center; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                    Add to Favorites!
+                </th>
+              {% elif option == "all_favorites" %}
+                <th scope="col" 
+                    style="text-align: center; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                    Remove From Favorites
+                </th>
+              {% endif %}
+            </tr>
+        </thead>
+    
+    {% if data %}
+      {% for row in data %}
+      <tr>
+      <td style="vertical-align: middle"><img 
+          src={{row['image']}} 
+          width="100" 
+          height="60"></td>
+      
+      <td style="vertical-align: middle; font-size: small;">
+        <!-- Button trigger modal -->
+        <button type="button" 
+                class="btn btn-secondary btn-small" 
+                style="border-style: outset; border-width: 3px; border-color: darkgray; font-size: small;"
+                data-toggle="modal" 
+                data-target="#{{row['title']}}">
+          {{row['title']}}
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" 
+            id="{{row['title']}}" 
+            tabindex="-1" 
+            role="dialog" 
+            aria-labelledby="exampleModalCenterTitle" 
+            aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Description</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {{row['description']}}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      
+      {% if option == "all_favorites" %}
+        <td style="vertical-align: middle; font-size: small">{{row['service_type']}}</td>
+      {% endif %}
+
+      {% with value_amt = row['critic_score'] %}
+          <td style="vertical-align: bottom; text-align: center;">
+          <div class="progress" style="border-style: outset; border-width: 3px; border-color: darkgray; height: 20px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                  role="progressbar" 
+                  style="width: {{value_amt}}%" 
+                  aria-valuenow="{{value_amt}}" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100"></div>
+          </div>        
+          <h2 style="font-size: small">{{value_amt}}</h2>
+          
+          </td>
+      {% endwith %}
+      <td style="vertical-align: middle; font-size: small">{{row['rating_name']}}</td>
+      <td style="vertical-align: middle; font-size: small">{{row['genre_name']}}</td>
+
+      {% if option == "all_movies" %}
+        <td style="vertical-align: middle; font-size: small">{{row['run_time_minutes']}}</td>
+      {% elif option == "all_tv" %}
+        <td style="vertical-align: middle; font-size: small">{{row['num_seasons']}}</td>
+      {% endif %}
+
+      {% if option == "all_movies" or option == "all_tv" %}
+        <td style="vertical-align: middle; text-align: center; font-size: small">
+            <form method="POST" action="">
+                <label class="btn-small btn-secondary"
+                        style="border-style: outset; border-width: 3px; border-color: darkgray">
+                    <input 
+                    type="submit" 
+                    name="favorite-{{row['guid']}}-{{row['service_type']}}"
+                    class="btn-small btn-secondary" 
+                    value="Favorite!" 
+                    autocomplete="off">
+                </label>  
+        </td>
+      {% elif option == "all_favorites" %}
+        <td style="vertical-align: middle; text-align: center; font-size: small">
+          <form method="POST" action="">
+              <label class="btn-small btn-secondary"
+                      style="border-style: outset; border-width: 3px; border-color: darkgray">
+                  <input 
+                  type="submit" 
+                  name="unfavorite-{{row['guid']}}-{{row['service_type']}}"
+                  class="btn-small btn-secondary" 
+                  value="Un-Favorite!" 
+                  autocomplete="off">
+              </label>  
+        </td>
+      {% endif %}
+      </tr>
+      {% endfor %}
+
+    {% else %}
+      {% if option != "all_favorites" %}
+        <tr>
+          <td colspan="8"  style="text-align: center;">No Matching Results Found!</td>
+        </tr>    
+      {% else %}
+        <tr>
+          <td colspan="8"  style="text-align: center;">No Favorites Added!</td>
+        </tr>
+      {% endif %}
+    {% endif %}
+    </table>
+</div>
+{% endblock %}

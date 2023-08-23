@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+
+{% block title %}
+Subscriptions
+{% endblock %}
+
+{% block content %}
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+  {% if option == "all_sub" %}
+    <h1 align="center">Services Offered by Stream Easy</h1>
+  {% else %}
+    <h1 align="center">My Subscriptions</h1>
+  {% endif %}
+</div>
+
+<br />
+
+<form method="POST" action="{{url_for('views.subscriptions')}}">
+    <label class="btn btn-secondary" 
+           style="border-style: outset; border-width: 5px; border-color: darkgray">
+      <input 
+        type="submit" 
+        name="all_sub" 
+        class="btn btn-secondary" 
+        value="All Services" 
+        autocomplete="off">
+    </label>
+    <label class="btn btn-secondary" 
+           style="border-style: outset; border-width: 5px; border-color: darkgray">
+      <input 
+        type="submit" 
+        name="my_sub" 
+        class="btn btn-secondary" 
+        value="My Subscriptions" 
+        autocomplete="off">
+    </label>
+
+    {% if option == "all_sub" %}
+      <button class="btn btn-outline-secondary dropdown-toggle" 
+              type="button" 
+              data-toggle="dropdown" 
+              aria-haspopup="true" 
+              aria-expanded="false">Filter By:
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" 
+          style="padding: 0px; margin: 0px; border-spacing: 0px; offset: 0px">
+          <input 
+            style="width: 100%; border-style: outset; border-width: 3px; border-color: darkgray"
+            class="btn btn-secondary" 
+            type="submit" 
+            name="a-z" 
+            value="A-Z" 
+            autocomplete="off">
+        </a>
+        <a class="dropdown-item" 
+          style="padding: 0px; margin: 0px; border-spacing: 0px; offset: 0px">
+          <input 
+            style="width: 100%; border-style: outset; border-width: 3px; border-color: darkgray"
+            class="btn btn-secondary" 
+            type="submit" 
+            name="z-a" 
+            value="Z-A" 
+            autocomplete="off">
+        </a>
+        <a class="dropdown-item" 
+          style="padding: 0px; margin: 0px; border-spacing: 0px; offset: 0px">
+          <input 
+            style="width: 100%; border-style: outset; border-width: 3px; border-color: darkgray"
+            class="btn btn-secondary" 
+            type="submit" 
+            name="price-high" 
+            value="Price High-Low" 
+            autocomplete="off">
+        </a>
+        <a class="dropdown-item" 
+          style="padding: 0px; margin: 0px; border-spacing: 0px; offset: 0px">
+          <input 
+            style="width: 100%; border-style: outset; border-width: 3px; border-color: darkgray"
+            class="btn btn-secondary" 
+            type="submit" 
+            name="price-low" 
+            value="Price Low-High" 
+            autocomplete="off">
+        </a>
+        <a class="dropdown-item" 
+          style="padding: 0px; margin: 0px; border-spacing: 0px; offset: 0px">
+          <input 
+            style="width: 100%; border-style: outset; border-width: 3px; border-color: darkgray"
+            class="btn btn-secondary" 
+            type="submit" 
+            name="popularity-high" 
+            value="Popularity High-Low" 
+            autocomplete="off">
+        </a>
+        <a class="dropdown-item" 
+          style="padding: 0px; margin: 0px; border-spacing: 0px; offset: 0px">
+          <input 
+            style="width: 100%; border-style: outset; border-width: 3px; border-color: darkgray"
+            class="btn btn-secondary" 
+            type="submit" 
+            name="popularity-low" 
+            value="Popularity Low-High" 
+            autocomplete="off">
+        </a>
+      </div>
+    {% endif %}
+</form>
+
+<table class="table table-striped" style="border-style: inset; border-width: 5px">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col"></th>
+    <th scope="col">Subscription Service</th>
+    <th scope="col" style="text-align: center;">Hourly Price</th>
+    <th scope="col" style="text-align: center;">Monthly Price</th>
+    {% if option == "all_sub" %}
+      <th scope="col" style="text-align: center; vertical-align: bottom;">
+        Popularity
+        <h1 style="font-size:small; font-style: italic;">(% Total Users Subscribed)</h1>
+      </th>
+    {% endif %}
+    {% if option == "all_sub" %}
+      <th scope="col" style="text-align: center">Add a New Service!</th>
+    {% else %}
+      <th scope="col" style="text-align: center">Modify Subscriptions</th>
+    {% endif %}
+  </tr>
+  </thead>
+
+  {% if data %}
+  {% for row in data %}
+    <tr>
+      <td style="vertical-align: middle"><img src={{row['image']}} width="100" height="60"></td>
+      <td style="vertical-align: middle": center>{{row['service_name']}}</td>
+      <td style="vertical-align: middle; text-align: center;">${{((row['subscription_price']/30)/24)|round(4)}}</td>
+      <td style="vertical-align: middle; text-align: center;">${{row['subscription_price']}}</td>
+      {% with value_amt = row['num_subscribed'], max_amt = row['total_users'] %}
+      {% if option == "all_sub" %}
+        <td style="vertical-align: bottom; text-align: center;">
+          <div class="progress" style="border-style: outset; border-width: 3px; border-color: darkgray; height: 20px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                 role="progressbar" 
+                 style="width: {{((value_amt / max_amt)*100)|round(0)}}%" 
+                 aria-valuenow="{{value_amt}}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="{{value_max}}"></div>
+          </div>        
+          <h2 style="font-size: small">{{((value_amt / max_amt)*100)|round(0)}}%</h2>
+          
+        </td>
+      {% endif %}
+      {% endwith %}
+      <td style="vertical-align: middle; text-align: center;">
+        <form method="POST" action="">
+            {% if option == "all_sub" %}
+              <label class="btn-small btn-secondary">
+                <input
+                  style="width: 175px; border-style: outset; border-width: 5px; border-color: darkgray" 
+                  type="submit" 
+                  name="{{row['service_name']}}"
+                  class="btn-small btn-secondary" 
+                  value="Add: {{row['service_name']}}" 
+                  autocomplete="off">
+              </label>  
+            {% else %}
+              <label class="btn-small btn-secondary">
+                <input 
+                  style="width: 200px; border-style: outset; border-width: 5px; border-color: darkgray" 
+                  type="submit" 
+                  name="{{row['service_name']}}"
+                  class="btn-small btn-secondary" 
+                  value="Delete: {{row['service_name']}}" 
+                  autocomplete="off">
+              </label>  
+            {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+
+  {% else %}
+
+    <td colspan="8"  style="text-align: center;">No Subscriptions Added!</td>
+
+  {% endif %}
+
+  {% if option == "my_sub" %}
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col" style="text-align: right">Total Monthly Cost:</th>
+      {% if total_cost%}
+        <th scope="col" style="text-align: center">${{total_cost|round(2)}}</th>
+      {% else %}
+        <th scope="col" style="text-align: left">$0.00</th>
+      {% endif %}
+      <th scope="col"></th>
+    </tr>
+    </thead>
+  {% else %}
+   <thead class="thead-dark">
+    <tr>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+  {% endif %}
+</table>
+
+<br />
+
+{% if option == "my_sub" %}
+<div class="p-3 mb-2 bg-light text-dark" style="border-style: outset; border-width: 5px">
+  <h1 align="center">Recommended Content Based On Your Subscriptions!</h1>
+</div>
+
+<div class="panel-body table-responsive" 
+     style="border-style: inset; border-width: 5px; max-height:500px">
+    
+     <table class="table table-striped" 
+            style="border-style: inset; border-width: 5px;">
+        <thead class="thead-dark" 
+               style="box-shadow: inset 5px 5px darkgray, 0 5px darkgray; position: sticky; top: 0; position: sticky; left: 0">
+            <tr>
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Service
+              </th>
+              
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Title
+                  <h1 style="font-size:small; font-style: italic;">(Click Title For Description)</h1>
+              </th>
+              
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Type
+              </th>
+
+              <th scope="col" 
+                  style="text-align: center; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Critic Score
+                  <h1 style="font-size:small; font-style: italic;">(Rotten Tomatoes)</h1>
+              </th>
+              
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Rating
+              </th>
+              
+              <th scope="col" 
+                  style="text-align: left; vertical-align: bottom; position: sticky; top: 0; position: sticky; left: 0">
+                  Genre
+              </th>
+            </tr>
+        </thead>
+    
+    {% if recommended %}
+      {% for row in recommended %}
+      <tr>
+      <td style="vertical-align: middle"><img 
+          src={{row['image']}} 
+          width="100" 
+          height="60"></td>
+      
+      <td style="vertical-align: middle; font-size: small;">
+        <!-- Button trigger modal -->
+        <button type="button" 
+                class="btn btn-secondary btn-small" 
+                style="border-style: outset; border-width: 3px; border-color: darkgray; font-size: small;"
+                data-toggle="modal" 
+                data-target="#{{row['title']}}">
+          {{row['title']}}
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" 
+            id="{{row['title']}}" 
+            tabindex="-1" 
+            role="dialog" 
+            aria-labelledby="exampleModalCenterTitle" 
+            aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Description</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {{row['description']}}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      
+      <td style="vertical-align: middle; font-size: small">{{row['service_type']}}</td>
+      {% with value_amt = row['critic_score'] %}
+          <td style="vertical-align: bottom; text-align: center;">
+          <div class="progress" style="border-style: outset; border-width: 3px; border-color: darkgray; height: 20px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                  role="progressbar" 
+                  style="width: {{value_amt}}%" 
+                  aria-valuenow="{{value_amt}}" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100"></div>
+          </div>        
+          <h2 style="font-size: small">{{value_amt}}</h2>
+          
+          </td>
+      {% endwith %}
+      <td style="vertical-align: middle; font-size: small">{{row['rating_name']}}</td>
+      <td style="vertical-align: middle; font-size: small">{{row['genre_name']}}</td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="8"  style="text-align: center;">Add Subscriptions to Get Recommended Content!</td>
+      </tr>
+    {% endif %}
+    </table>
+</div>
+
+{% endif %}
+
+
+{% endblock %}
